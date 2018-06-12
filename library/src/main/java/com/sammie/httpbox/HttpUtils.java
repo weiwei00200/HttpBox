@@ -1,7 +1,7 @@
 package com.sammie.httpbox;
 
-import android.content.Context;
-import android.view.View;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
 * Http请求入口
@@ -14,11 +14,33 @@ public class HttpUtils {
     private static IHttpRequest mInitHttpRequest;
     private static HttpConfig mHttpConfig;
 
-    public static void initHttpRequest(IHttpRequest httpRequest,HttpConfig httpConfig) {
+    private int TypeGet = 0x0011, TypePost = 0x0022;
+    private int mReqType;//请求类型
+    private Map<String, Object> mParamMap;//请求参数
+    private String url="";//请求URL
+
+    public static void initHttpRequest(IHttpRequest httpRequest) {
         mInitHttpRequest = httpRequest;
-        mHttpConfig = httpConfig;
     }
 
+    public HttpUtils(){
+        mParamMap = new HashMap<>();
+    }
+
+    public HttpUtils get(){
+        mReqType = TypeGet;
+        return this;
+    }
+
+    public HttpUtils param(String key , Object value){
+        mParamMap.put(key, value);
+        return this;
+    }
+
+    public HttpUtils url(String url) {
+        this.url = url;
+        return this;
+    }
 
     // 省略部分代码 ......
     public <T> void execute(IHttpCallBack<T> callback) {
