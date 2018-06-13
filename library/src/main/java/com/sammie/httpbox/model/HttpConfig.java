@@ -1,22 +1,23 @@
-package com.sammie.httpbox;
+package com.sammie.httpbox.model;
 
 /**
-* 网络配置
-* @author ZhangWeijun
-* @time 2018/6/12 16:19
-*/
+ * 网络配置
+ *
+ * @author ZhangWeijun
+ * @time 2018/6/12 16:19
+ */
 public class HttpConfig {
 
     private final String baseUrl;
     private final int timeout;
-    private final boolean retryOnFail;//失败时是否重试请求
-    private final int retryTimes;//重试次数
+    private final boolean retryOnFail;
+    private final long cacheTime;//缓存时间，单位 秒
 
-    private HttpConfig(HttpConfigBuilder builder){
+    private HttpConfig(HttpConfigBuilder builder) {
         this.baseUrl = builder.baseUrl;
         this.timeout = builder.timeout;
         this.retryOnFail = builder.retryOnFail;
-        this.retryTimes  = builder.retryTimes;
+        this.cacheTime = builder.cacheTime;
     }
 
     public String getBaseUrl() {
@@ -31,19 +32,22 @@ public class HttpConfig {
         return retryOnFail;
     }
 
-    public int getRetryTimes() {
-        return retryTimes;
+    public long getCacheTime() {
+        return cacheTime;
     }
 
-    public static class HttpConfigBuilder{
+    public static class HttpConfigBuilder {
         private String baseUrl = "";
         private int timeout = 15;
         private boolean retryOnFail = true;//失败时是否重试请求
-        private int retryTimes = 2;//重试次数
-        private boolean cacheEnable = false;//是否开启缓存
+        private long cacheTime = 30;
 
-        public HttpConfigBuilder(String baseUrl){
+        public HttpConfigBuilder() {
+        }
+
+        public HttpConfigBuilder baseUrl(String baseUrl) {
             this.baseUrl = baseUrl;
+            return this;
         }
 
         public HttpConfigBuilder timeout(int timeout) {
@@ -56,17 +60,12 @@ public class HttpConfig {
             return this;
         }
 
-        public HttpConfigBuilder retryTimes(int retryTimes) {
-            this.retryTimes = retryTimes;
+        public HttpConfigBuilder cacheTime(long cacheTime) {
+            this.cacheTime = cacheTime;
             return this;
         }
 
-        public HttpConfigBuilder cacheEnable(boolean cacheEnable){
-            this.cacheEnable = cacheEnable;
-            return this;
-        }
-
-        public HttpConfig builder(){
+        public HttpConfig builder() {
             return new HttpConfig(this);
         }
 

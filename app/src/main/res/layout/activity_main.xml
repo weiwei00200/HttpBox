@@ -8,13 +8,14 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="OkHttp"
-        android:onClick="clickOkHttp"/>
+        android:text="Get"
+        android:textAllCaps="false"
+        android:onClick="clickGet"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="XUtil"
+        android:text="Post"
         android:layout_marginTop="20dp"
-        android:onClick="clickXUtil"/>
+        android:onClick="clickPost"/>
 </LinearLayout>
