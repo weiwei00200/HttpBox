@@ -3,10 +3,14 @@ package com.sammie.httpbox;
 import com.sammie.httpbox.frame.OkHttpRequest;
 import com.sammie.httpbox.model.HttpConfig;
 import com.sammie.httpbox.model.IHttpCallBack;
+import com.sammie.httpbox.model.IHttpDownloadCallBack;
 import com.sammie.httpbox.model.IHttpRequest;
+import com.sammie.httpbox.model.IHttpUploadCallBack;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import okhttp3.HttpUrl;
 
 /**
  * Http请求入口
@@ -27,6 +31,9 @@ public class HttpUtils<T> {
     private Map<String, Object> mParamMap;//请求参数
     private Class<T> mParseClass;//json需要装换的ObjectClass
     private boolean mCache;//是否要使用缓存
+    private String mDownloadFileSavePath = "";//下载文件保存的路劲
+    private String mDownloadFileName = "";//下载文件的定义名称
+    private String mUploadFilePath = "";//上传文件的本地路径
 
     public static void initHttpRequest(IHttpRequest httpRequest) {
         mInitIHttpRequest = httpRequest;
@@ -36,9 +43,27 @@ public class HttpUtils<T> {
         return new HttpUtils(parseClass);
     }
 
+    public static HttpUtils with() {
+        return new HttpUtils();
+    }
+
+    private HttpUtils() {
+        checkIHttpRequest();
+        mParamMap = new HashMap<>();
+    }
+
     private HttpUtils(Class parseClass) {
+        checkIHttpRequest();
         mParseClass = parseClass;
         mParamMap = new HashMap<>();
+    }
+    private void checkIHttpRequest(){
+        if (mInitIHttpRequest != null) {
+            mIHttpRequest = mInitIHttpRequest;
+        } else {
+            //如果没设置就默认用OkHttp;
+            mIHttpRequest = new OkHttpRequest(new HttpConfig.HttpConfigBuilder().builder());
+        }
     }
 
     public HttpUtils get() {
@@ -66,13 +91,27 @@ public class HttpUtils<T> {
         return this;
     }
 
+    public HttpUtils downloadFileSavePath(String downloadFileSavePath) {
+        mDownloadFileSavePath = downloadFileSavePath;
+        return this;
+    }
+
+    public HttpUtils downloadFileName(String downloadFileName){
+        mDownloadFileName = downloadFileName;
+        return this;
+    }
+
+    public HttpUtils uploadFilePath(String uploadFilePath) {
+        mUploadFilePath = uploadFilePath;
+        return this;
+    }
+
+    /**
+     * 请求数据
+     *
+     * @param callback
+     */
     public void execute(IHttpCallBack<T> callback) {
-        if (mInitIHttpRequest != null) {
-            mIHttpRequest = mInitIHttpRequest;
-        } else {
-            //如果没设置就默认用OkHttp;
-            mIHttpRequest = new OkHttpRequest(new HttpConfig.HttpConfigBuilder().builder());
-        }
         if (mReqType == TypeGet) {
             mIHttpRequest.get(mUrl, mParamMap, mParseClass, mCache, callback);
         } else if (mReqType == TypePost) {
@@ -80,4 +119,16 @@ public class HttpUtils<T> {
         }
     }
 
+    /**
+     * 下载文件
+     *
+     * @param callBack
+     */
+    public void download(IHttpDownloadCallBack callBack) {
+        mIHttpRequest.download(mUrl, mDownloadFileSavePath, mDownloadFileName, callBack);
+    }
+
+    public void upload(IHttpUploadCallBack callBack) {
+        mIHttpRequest.upload(mUrl, mUploadFilePath, mParamMap, callBack);
+    }
 }

@@ -8,14 +8,38 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="clickGet"
         android:text="Get"
-        android:textAllCaps="false"
-        android:onClick="clickGet"/>
+        android:textAllCaps="false" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Post"
         android:layout_marginTop="20dp"
-        android:onClick="clickPost"/>
+        android:onClick="clickPost"
+        android:text="Post"
+        android:textAllCaps="false" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:onClick="clickDownload"
+        android:text="Download"
+        android:textAllCaps="false" />
+
+    <ProgressBar
+        android:id="@+id/id_progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:progress="0"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:onClick="clickUpload"
+        android:text="Upload"
+        android:textAllCaps="false" />
 </LinearLayout>
