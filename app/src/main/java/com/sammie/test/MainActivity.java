@@ -8,9 +8,11 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.sammie.httpbox.HttpUtils;
+import com.sammie.httpbox.model.HttpBoxException;
 import com.sammie.httpbox.model.HttpConfig;
 import com.sammie.httpbox.model.IHttpCallBack;
 import com.sammie.httpbox.model.IHttpDownloadCallBack;
+import com.sammie.httpbox.model.IHttpUploadCallBack;
 
 import java.io.File;
 
@@ -21,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void clickGet(View view) {
+    public void clickGet(View view) throws HttpBoxException {
         HttpUtils.with(AdResponse.class)
                 .get()
                 .url("/api/v1/advert/school")
@@ -45,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void clickPost(View view) {
+    public void clickPost(View view) throws HttpBoxException {
         HttpUtils.with(RegisterResponse.class)
                 .post()
                 .url("/api/v1/auth/register")
@@ -72,13 +74,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void clickDownload(View view) {
-        final ProgressBar progressBar = findViewById(R.id.id_progress_bar);
+    public void clickDownload(View view) throws HttpBoxException {
+        final ProgressBar progressBar = findViewById(R.id.id_download_progress_bar);
 
         HttpUtils.with()
-                .url("https://downpack.baidu.com/appsearch_AndroidPhone_1012271b.apk")
+                .url("http://shouji.360tpcdn.com/180503/78ef176d24b7de2272bf8d88e9da5035/com.qihoo360.mobilesafe_260.apk")
                 .downloadFileSavePath(getSDPath() + "/")
-                .downloadFileName("baidu.apk")
+                .downloadFileName("360.apk")
                 .download(new IHttpDownloadCallBack() {
 
                     @Override
@@ -92,19 +94,79 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void downloadFailed() {
+                    public void onDownloadSuccessful(String path) {
+
+                    }
+
+                    @Override
+                    public void onDownloadFailed() {
                         showToast("下载失败");
                     }
 
                     @Override
-                    public void onFinish(String path) {
-                        showToast("下载完成："+path);
+                    public void onFinish() {
+                        showToast("下载完成");
                     }
                 });
     }
 
-    public void clickUpload(View view) {
+    public void clickUploadFile(View view) throws HttpBoxException {
+        //不带参数上传文件
+        HttpUtils.with()
+                .url("http://xxxxxxx")
+                .uploadFilePath(getSDPath() + "/360.apk")
+                .upload(new IHttpUploadCallBack() {
 
+                    @Override
+                    public void onStartUpload() {
+                        showToast("开始上传");
+                    }
+
+                    @Override
+                    public void onUploadFailed() {
+                        showToast("上传失败");
+                    }
+
+                    @Override
+                    public void onUploadSuccessful() {
+                        showToast("上传成功");
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        showToast("上传完成");
+                    }
+                });
+    }
+
+    public void clickUploadFileWithParam(View view) throws HttpBoxException {
+        //带参数上传文件
+        HttpUtils.with()
+                .url("http://xxxxxxx")
+                .param("userName", "Sammie")
+                .param("file", new File(getSDPath() + "/360.apk"))
+                .upload(new IHttpUploadCallBack() {
+
+                    @Override
+                    public void onStartUpload() {
+                        showToast("开始上传");
+                    }
+
+                    @Override
+                    public void onUploadFailed() {
+                        showToast("上传失败");
+                    }
+
+                    @Override
+                    public void onUploadSuccessful() {
+                        showToast("上传成功");
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        showToast("上传完成");
+                    }
+                });
     }
 
 

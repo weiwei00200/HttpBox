@@ -11,5 +11,4 @@ public class Utils {
             return baseUrl + "/" + url;
         }
     }
-
 }

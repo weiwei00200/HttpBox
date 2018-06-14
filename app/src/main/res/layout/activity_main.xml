@@ -29,17 +29,25 @@
         android:textAllCaps="false" />
 
     <ProgressBar
-        android:id="@+id/id_progress_bar"
+        android:id="@+id/id_download_progress_bar"
+        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:progress="0"/>
+        android:progress="0" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:onClick="clickUpload"
-        android:text="Upload"
+        android:onClick="clickUploadFile"
+        android:text="Upload File"
+        android:textAllCaps="false" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:onClick="clickUploadFileWithParam"
+        android:text="Upload File with param"
         android:textAllCaps="false" />
 </LinearLayout>

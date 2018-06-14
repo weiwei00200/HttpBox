@@ -1,11 +1,15 @@
 package com.sammie.httpbox;
 
+import android.text.TextUtils;
+
 import com.sammie.httpbox.frame.OkHttpRequest;
+import com.sammie.httpbox.model.HttpBoxException;
 import com.sammie.httpbox.model.HttpConfig;
 import com.sammie.httpbox.model.IHttpCallBack;
 import com.sammie.httpbox.model.IHttpDownloadCallBack;
 import com.sammie.httpbox.model.IHttpRequest;
 import com.sammie.httpbox.model.IHttpUploadCallBack;
+import com.sammie.httpbox.util.Utils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -57,7 +61,8 @@ public class HttpUtils<T> {
         mParseClass = parseClass;
         mParamMap = new HashMap<>();
     }
-    private void checkIHttpRequest(){
+
+    private void checkIHttpRequest() {
         if (mInitIHttpRequest != null) {
             mIHttpRequest = mInitIHttpRequest;
         } else {
@@ -96,7 +101,7 @@ public class HttpUtils<T> {
         return this;
     }
 
-    public HttpUtils downloadFileName(String downloadFileName){
+    public HttpUtils downloadFileName(String downloadFileName) {
         mDownloadFileName = downloadFileName;
         return this;
     }
@@ -111,7 +116,11 @@ public class HttpUtils<T> {
      *
      * @param callback
      */
-    public void execute(IHttpCallBack<T> callback) {
+    public void execute(IHttpCallBack<T> callback) throws HttpBoxException{
+        if(TextUtils.isEmpty(mUrl)){
+            throw new HttpBoxException("Request url cannot be null.");
+        }
+
         if (mReqType == TypeGet) {
             mIHttpRequest.get(mUrl, mParamMap, mParseClass, mCache, callback);
         } else if (mReqType == TypePost) {
@@ -121,14 +130,34 @@ public class HttpUtils<T> {
 
     /**
      * 下载文件
-     *
+     *f
      * @param callBack
      */
-    public void download(IHttpDownloadCallBack callBack) {
+    public void download(IHttpDownloadCallBack callBack) throws  HttpBoxException{
+        if(TextUtils.isEmpty(mUrl)){
+            throw new HttpBoxException("Request url cannot be null.");
+        }else if(TextUtils.isEmpty(mDownloadFileSavePath)){
+            throw new HttpBoxException("The DownloadFileSavePath url cannot be null.");
+        }
         mIHttpRequest.download(mUrl, mDownloadFileSavePath, mDownloadFileName, callBack);
     }
 
-    public void upload(IHttpUploadCallBack callBack) {
-        mIHttpRequest.upload(mUrl, mUploadFilePath, mParamMap, callBack);
+    public void upload(IHttpUploadCallBack callBack) throws  HttpBoxException{
+        if(TextUtils.isEmpty(mUrl)){
+            throw new HttpBoxException("Request url cannot be null.");
+        }
+        if (mParamMap.size() == 0) {
+            if(TextUtils.isEmpty(mUploadFilePath)){
+                throw new HttpBoxException("The UploadFilePath url cannot be null.");
+            }
+            //不带参数上传
+            mIHttpRequest.upload(mUrl, mUploadFilePath, callBack);
+        } else {
+            if(mParamMap.size() == 0){
+                throw new HttpBoxException("The UploadFilePath param cannot be null.");
+            }
+            //带参数上传
+            mIHttpRequest.upload(mUrl, mParamMap, callBack);
+        }
     }
 }

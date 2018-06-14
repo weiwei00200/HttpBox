@@ -6,7 +6,9 @@ public interface IHttpDownloadCallBack {
 
     void onStartDownload();
 
-    void downloadFailed();
+    void onDownloadSuccessful(String path);
 
-    void onFinish(String path);
+    void onDownloadFailed();
+
+    void onFinish();
 }

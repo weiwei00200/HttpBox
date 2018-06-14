@@ -40,11 +40,19 @@ public interface IHttpRequest {
 
 
     /**
+     * 上传文件，带参数，图片也带key
+     *
+     * @param url
+     * @param callBack
+     */
+    void upload(String url, Map<String, Object> params, final IHttpUploadCallBack callBack);
+
+    /**
      * 上传文件
      *
      * @param url
      * @param localPath
      * @param callBack
      */
-    void upload(String url, String localPath, Map<String, Object> params, final IHttpUploadCallBack callBack);
+    void upload(String url, String localPath, final IHttpUploadCallBack callBack);
 }
