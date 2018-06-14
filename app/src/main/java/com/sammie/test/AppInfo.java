@@ -14,17 +14,17 @@ public class AppInfo extends Application {
         super.onCreate();
         String baseUrl = "https://testapi.xhuijia.com/";
 
-//        HttpUtils.initHttpRequest(new OkHttpRequest(
-//                new HttpConfig.HttpConfigBuilder()
-//                        .baseUrl(baseUrl)
-//                        .timeout(15000)
-//                        .retryOnFail(true)
-//                        .builder()));//使用OkHttp
-        HttpUtils.initHttpRequest(new XUtilRequest(this,
+        HttpUtils.initHttpRequest(new OkHttpRequest(
                 new HttpConfig.HttpConfigBuilder()
                         .baseUrl(baseUrl)
                         .timeout(15000)
                         .retryOnFail(true)
-                        .builder()));//使用XUtil
+                        .builder()));//使用OkHttp
+//        HttpUtils.initHttpRequest(new XUtilRequest(this,
+//                new HttpConfig.HttpConfigBuilder()
+//                        .baseUrl(baseUrl)
+//                        .timeout(15000)
+//                        .retryOnFail(true)
+//                        .builder()));//使用XUtil
     }
 }
